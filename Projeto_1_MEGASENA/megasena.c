@@ -8,12 +8,12 @@
 
 
 //APOSTAS MANUAIS
-void qtdApostasManuais(int ApostasManuais[][15], int QM, int QD) {
+void qtdApostasManuais(int ApostasManuais[][15], int _quantidadeApostasManuais, int _quantidadeDezenas) {
 
-    for (int i = 0; i < QM; i++) {
+    for (int i = 0; i < _quantidadeApostasManuais; i++) {
         printf("\n\n___APOSTAS MANUAIS %d___\n\n", i + 1);
 
-        for (int j = 0; j < QD; j++) {
+        for (int j = 0; j < _quantidadeDezenas; j++) {
             printf("Aposta Manual %d: ", j + 1); scanf("%d", &ApostasManuais[i][j]);
 
             //Caso informe um numero menor que 1 ou maior que 60
@@ -40,9 +40,9 @@ void qtdApostasManuais(int ApostasManuais[][15], int QM, int QD) {
 
 
 //Surpresinhas
-void qtdsurpresinhas (int ApostaSurpresinhas [][15], int QS, int QD) {
-    for (int i = 0; i < QS; i++) {
-        for (int j = 0; j < QD; j++) {
+void qtdsurpresinhas (int ApostaSurpresinhas [][15], int _quantidadeApostasSurpresinhas, int _quantidadeDezenas) {
+    for (int i = 0; i < _quantidadeApostasSurpresinhas; i++) {
+        for (int j = 0; j < _quantidadeDezenas; j++) {
             ApostaSurpresinhas [i][j]= rand() % 60 + 1;
 
             //Caso o computador gere um numero repetido
@@ -60,8 +60,8 @@ void qtdsurpresinhas (int ApostaSurpresinhas [][15], int QS, int QD) {
 
 
 //Valor das dezenas
-float ValorDezenas (int QD) {
-    switch (QD) {
+float ValorDezenas (int _quantidadeDezenas) {
+    switch (_quantidadeDezenas) {
         case 6: 
             return 5;
             break;
@@ -118,7 +118,7 @@ void FunAcertos (int acertos) {
 
 
 //Calcular valor dos premios finais
-float calculopremios (int acertos, int QD) {
+float calculopremios (int acertos, int _quantidadeDezenas) {
     int premio [10][6] = {
         {1, 0, 0, 1, 0, 1},        // 6 dezenas
         {1, 6, 0, 2, 5, 3},        // 7 dezenas
@@ -136,11 +136,11 @@ float calculopremios (int acertos, int QD) {
 
     float premio_total = 0.0;
     if (acertos == 6) {
-        premio_total = sena * premio[QD - 6][0];
+        premio_total = sena * premio[_quantidadeDezenas - 6][0];
     } else if (acertos == 5) {
-        premio_total = quina * premio[QD - 6][1];
+        premio_total = quina * premio[_quantidadeDezenas - 6][1];
     } else if (acertos == 4) {
-        premio_total = quadra * premio[QD - 6][2];
+        premio_total = quadra * premio[_quantidadeDezenas - 6][2];
     }
 
     return premio_total;
@@ -149,20 +149,20 @@ float calculopremios (int acertos, int QD) {
 
 
 //Comparar numeros sorteados com valores do usuario
-void sorteio (int ApostasManuais [][15], int ApostaSurpresinhas [] [15], int QT, int QM, int QD, int QS, float TotalApostas) {
+void sorteio (int ApostasManuais [][15], int ApostaSurpresinhas [] [15], int _quantidadeTeimosinhas, int _quantidadeApostasManuais, int _quantidadeDezenas, int _quantidadeApostasSurpresinhas, float TotalApostas) {
     int teimosinhas = 1, acertos, num = 1, sorteadas [6]; float premio = 0.0, premiototal = 0.0, total = 0.0;
     system ("cls");
 
     printf("VOCE ESCOLHEU\n");
-    printf("\n%d Dezenas", QD); //6 a 15
-    printf("\n%d Manuais", QM); //0 a 3
-    printf("\n%d Surpresinhas", QS); //0 a 7
-    printf("\n%d Teimosinhas\n", QT);// 0, 1, 2, 4, 8
+    printf("\n%d Dezenas", _quantidadeDezenas); //6 a 15
+    printf("\n%d Manuais", _quantidadeApostasManuais); //0 a 3
+    printf("\n%d Surpresinhas", _quantidadeApostasSurpresinhas); //0 a 7
+    printf("\n%d Teimosinhas\n", _quantidadeTeimosinhas);// 0, 1, 2, 4, 8
     printf("\n=======================================================================================");
     printf("\n\nVAMOS PRO SORTEIO");
     sleep (1);
 
-    while (teimosinhas <= QT) {
+    while (teimosinhas <= _quantidadeTeimosinhas) {
         printf("\n\n===============================================================");
         printf("\n\n>>>> Concurso 000%d <<<<\n\n", teimosinhas);
         printf("Numeros Sorteados => ");
@@ -186,10 +186,10 @@ void sorteio (int ApostasManuais [][15], int ApostaSurpresinhas [] [15], int QT,
         sleep (1);
         
          //Comparando Manuais
-        for (int i = 0; i < QM; i++) {
+        for (int i = 0; i < _quantidadeApostasManuais; i++) {
             acertos = 0;
 
-            for (int j = 0; j < QD; j++) {
+            for (int j = 0; j < _quantidadeDezenas; j++) {
                 for (int k = 0; k < 6; k++) {
                     if (sorteadas [k] == ApostasManuais [i][j]){
                         acertos++;
@@ -202,16 +202,16 @@ void sorteio (int ApostasManuais [][15], int ApostaSurpresinhas [] [15], int QT,
             printf("%d/6", acertos);
             if (acertos == 4 || acertos == 5 || acertos == 6) {
                 FunAcertos (acertos);
-                premio = calculopremios (acertos, QD);
+                premio = calculopremios (acertos, _quantidadeDezenas);
                 premiototal = premiototal + premio;
             }
         }
 
         //Comparando Surpresinhas
-        for (int i = 0; i < QS; i++) {
+        for (int i = 0; i < _quantidadeApostasSurpresinhas; i++) {
             acertos = 0;
 
-            for (int j = 0; j < QD; j++) {
+            for (int j = 0; j < _quantidadeDezenas; j++) {
                 for (int k = 0; k < 6; k++) {
                     if (sorteadas [k] == ApostaSurpresinhas [i][j]){
                         acertos++;
@@ -224,7 +224,7 @@ void sorteio (int ApostasManuais [][15], int ApostaSurpresinhas [] [15], int QT,
             printf("%d/6", acertos);
             if (acertos == 4 || acertos == 5 || acertos == 6) {
                 FunAcertos (acertos);
-                premio = calculopremios (acertos, QD);
+                premio = calculopremios (acertos, _quantidadeDezenas);
                 premiototal = premiototal + premio;
             }
         }
